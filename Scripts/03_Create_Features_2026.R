@@ -41,10 +41,10 @@ IUCN_Coral <- readRDS(file = file.path(rds_dir2, "IUCN_Coral.rds")) %>%
 out <- Coral %>%
   sf::st_intersection(PUs) %>%
   dplyr::mutate(Coral_area_km2 = as.numeric(units::set_units(sf::st_area(.), "km2"))) %>%
+  sf::st_drop_geometry() %>%
   dplyr::group_by(cellID) %>%
   dplyr::summarise(Coral_area_km2 = sum(Coral_area_km2),
                    .groups = "drop_last") %>%
-  sf::st_drop_geometry() %>%
   dplyr::left_join(PUs, ., by = "cellID")
 out_Coral <- out[!is.na(out$Coral_area_km2), ]
 saveRDS(out_Coral, file = file.path(rds_dir, "out_Coral.rds"))
@@ -52,12 +52,14 @@ saveRDS(out_Coral, file = file.path(rds_dir, "out_Coral.rds"))
 # Interpolate IUCN Datasets onto PUs
 out <- IUCN_Coral %>%
   sf::st_make_valid() %>%
+  sf::st_crop(sf::st_bbox(out)) %>%
+  sf::st_cast("POLYGON") %>%
   sf::st_intersection(out %>% filter(Coral_area_km2 > 0)) %>%
   dplyr::mutate(IUCNCoral_area_km2 = as.numeric(units::set_units(sf::st_area(.), "km2"))) %>%
+  sf::st_drop_geometry() %>%
   dplyr::group_by(cellID) %>%
   dplyr::summarise(IUCNCoral_area_km2 = sum(IUCNCoral_area_km2),
                    .groups = "drop_last") %>%
-  sf::st_drop_geometry() %>%
   dplyr::left_join(out, ., by = "cellID")
 
 out <- out %>%
@@ -67,11 +69,7 @@ out <- out %>%
 saveRDS(out, file = file.path(rds_dir, "PUs.fin.rds"))
 out <- readRDS(file = file.path(rds_dir, "PUs.fin.rds"))
 
-
-#===============================================================================
 # Get coral species distribution from IUCN as separate binary features
-#===============================================================================
-
 # Use only planning units with coral area
 PUs_coral <- out %>%
   filter(Coral_area_km2 > 0) %>%

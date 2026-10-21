@@ -1,7 +1,4 @@
-#===============================================================================
-# 00_Dependencies
-# Shared libraries, paths, and project setup
-#===============================================================================
+# 00_Dependencies: This R Script sets up all shared libraries, paths, and project setup
 
 # Load required packages
 library(here)
@@ -29,4 +26,3 @@ rds_dir3 <- file.path(rds_dir, "03_Create_Features")
 # Quick check
 message("Project directory set to: ", project_dir)
 message("Current working directory: ", getwd())
-

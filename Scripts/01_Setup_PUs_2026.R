@@ -14,15 +14,15 @@ dir.create(fig_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(rds_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Load Libraries
-#install.packages("remotes")
-#remotes::install_github("emlab-ucsb/spatialgridr")
+# install.packages("remotes")
+# remotes::install_github("emlab-ucsb/spatialgridr")
 library(spatialgridr) # https://emlab-ucsb.github.io/spatialgridr/
 # gitcreds::gitcreds_set() # for reference: https://carpentries.github.io/sandpaper-docs/github-pat.html#creating-a-new-github-personal-access-token
 # remotes::install_github("emlab-ucsb/oceandatr")
 library(oceandatr) # https://emlab-ucsb.github.io/oceandatr/
 library(sf)
 library(tidyverse)
-#remotes::install_github("https://github.com/MathMarEcol/utils4mme")
+#remotes::install_github("https://github.com/MathMarEcol/utils4mme", force = TRUE)
 library(utils4mme)
 
 # Get EEZs for each country
@@ -39,7 +39,7 @@ saveRDS(PUs, file = file.path(rds_dir, "PUs.rds")) # Save as RDS as file is heav
 
 # Plot to check
 gg <- ggplot() + geom_sf(data = PUs, linewidth = 0.01) + geom_sf(data = eez, colour = "red", fill = NA)
-ggsave(file.path(fig_dir, "PUs.png"), gg) # Its pretty big so better to save it to a file, rather than display on screen.
+ggsave(file.path(fig_dir, "PUs.png"), gg) # Its pretty big so better to save as file, rather than display on screen.
 
 # Add PU area and Ecoregion
 PUs <- readRDS(file = file.path(rds_dir, "PUs.rds")) %>%

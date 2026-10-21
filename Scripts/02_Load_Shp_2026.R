@@ -16,6 +16,7 @@ dir.create(rds_dir, recursive = TRUE, showWarnings = FALSE)
 # Load libraries
 library(sf)
 library(tidyverse)
+# remotes::install_github("SpatialPlanning/spatialplanr")
 library(spatialplanr)
 
 # Read Extent Spatial Datasets
